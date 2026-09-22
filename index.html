@@ -1,0 +1,4766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0f766e">
+<title>BizFlow — Business Management Platform</title>
+
+<style>
+:root{
+--primary:#0f766e;
+--primary-dark:#115e59;
+--bg:#f4f7f7;
+--card:#fff;
+--text:#172033;
+--muted:#64748b;
+--border:#e2e8f0;
+--danger:#dc2626;
+--warning:#d97706;
+--success:#15803d;
+--shadow:0 8px 25px rgba(15,23,42,.07)
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+background:var(--bg);
+color:var(--text)
+}
+
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+
+.login{
+min-height:100vh;
+display:grid;
+place-items:center;
+padding:20px;
+background:linear-gradient(135deg,#0f766e,#134e4a)
+}
+
+.login-card{
+width:min(430px,100%);
+background:#fff;
+border-radius:24px;
+padding:30px;
+box-shadow:0 25px 60px #0004
+}
+
+.brand{
+font-size:32px;
+font-weight:900;
+color:var(--primary)
+}
+
+.tag{
+color:var(--muted);
+margin:5px 0 25px
+}
+
+label{
+display:block;
+font-size:13px;
+font-weight:700;
+margin:13px 0 6px
+}
+
+.field{
+width:100%;
+padding:12px 13px;
+border:1px solid var(--border);
+border-radius:11px;
+outline:none;
+background:#fff
+}
+
+.field:focus{
+border-color:var(--primary);
+box-shadow:0 0 0 3px #0f766e18
+}
+
+textarea{resize:vertical}
+
+.btn{
+border:0;
+border-radius:10px;
+padding:11px 15px;
+font-weight:800;
+background:var(--primary);
+color:#fff
+}
+
+.btn:hover{background:var(--primary-dark)}
+
+.btn.secondary{
+background:#e6f3f1;
+color:var(--primary-dark)
+}
+
+.btn.danger{
+background:#fee2e2;
+color:#991b1b
+}
+
+.btn.gray{
+background:#e2e8f0;
+color:#334155
+}
+
+.btn.small{
+padding:7px 10px;
+font-size:12px
+}
+
+.btn.full{
+width:100%;
+margin-top:18px
+}
+
+.app{
+display:none;
+min-height:100vh
+}
+
+.sidebar{
+position:fixed;
+left:0;
+top:0;
+bottom:0;
+width:250px;
+background:#fff;
+border-right:1px solid var(--border);
+padding:20px 14px;
+z-index:20
+}
+
+.logo{
+font-size:25px;
+font-weight:900;
+color:var(--primary);
+padding:5px 10px 20px
+}
+
+.nav button{
+display:block;
+width:100%;
+text-align:left;
+border:0;
+background:transparent;
+padding:11px 13px;
+border-radius:10px;
+margin:3px 0;
+color:#475569;
+font-weight:700
+}
+
+.nav button:hover,
+.nav button.active{
+background:#e7f5f3;
+color:var(--primary-dark)
+}
+
+.main{
+margin-left:250px;
+padding:24px;
+max-width:1700px
+}
+
+.top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:15px;
+margin-bottom:22px
+}
+
+.top h1{
+margin:0;
+font-size:25px
+}
+
+.top-right{
+display:flex;
+gap:8px;
+align-items:center
+}
+
+.pill{
+background:#e6f3f1;
+color:var(--primary-dark);
+padding:8px 11px;
+border-radius:999px;
+font-size:12px;
+font-weight:800
+}
+
+.page{display:none}
+.page.active{display:block}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(4,minmax(0,1fr));
+gap:14px
+}
+
+.card{
+background:#fff;
+border:1px solid var(--border);
+border-radius:15px;
+padding:18px;
+box-shadow:var(--shadow)
+}
+
+.metric .label{
+font-size:12px;
+color:var(--muted);
+font-weight:700
+}
+
+.metric .value{
+font-size:25px;
+font-weight:900;
+margin-top:6px
+}
+
+.metric .sub{
+font-size:12px;
+color:var(--muted);
+margin-top:4px
+}
+
+.grid2{
+display:grid;
+grid-template-columns:1.2fr .8fr;
+gap:16px;
+margin-top:16px
+}
+
+.section-title{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+margin-bottom:13px
+}
+
+.section-title h3{
+margin:0;
+font-size:16px
+}
+
+.table-wrap{overflow:auto}
+
+.table{
+width:100%;
+border-collapse:collapse;
+min-width:650px
+}
+
+.table th,
+.table td{
+text-align:left;
+padding:11px 10px;
+border-bottom:1px solid var(--border);
+font-size:13px
+}
+
+.table th{
+color:var(--muted);
+font-size:11px;
+text-transform:uppercase
+}
+
+.badge{
+display:inline-block;
+padding:5px 8px;
+border-radius:999px;
+font-size:11px;
+font-weight:800
+}
+
+.ok{
+background:#dcfce7;
+color:#166534
+}
+
+.warn{
+background:#fef3c7;
+color:#92400e
+}
+
+.bad{
+background:#fee2e2;
+color:#991b1b
+}
+
+.empty{
+padding:35px;
+text-align:center;
+color:var(--muted)
+}
+
+.toolbar{
+display:flex;
+flex-wrap:wrap;
+gap:8px;
+margin-bottom:14px
+}
+
+.toolbar .field{max-width:300px}
+
+.form-grid{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:10px
+}
+
+.form-grid.three{
+grid-template-columns:repeat(3,minmax(0,1fr))
+}
+
+.actions{
+display:flex;
+gap:7px;
+flex-wrap:wrap
+}
+
+.notice{
+background:#ecfeff;
+border:1px solid #a5f3fc;
+padding:12px;
+border-radius:11px;
+color:#155e75;
+font-size:13px
+}
+
+.bar{
+height:10px;
+background:#e2e8f0;
+border-radius:99px;
+overflow:hidden
+}
+
+.bar span{
+display:block;
+height:100%;
+background:var(--primary)
+}
+
+.modal{
+position:fixed;
+inset:0;
+background:#0f172a88;
+display:none;
+place-items:center;
+padding:18px;
+z-index:100
+}
+
+.modal.open{display:grid}
+
+.modal-box{
+width:min(700px,100%);
+max-height:92vh;
+overflow:auto;
+background:#fff;
+border-radius:18px;
+padding:22px
+}
+
+.modal-head{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:10px
+}
+
+.modal-head h2{
+margin:0;
+font-size:20px
+}
+
+.x{
+border:0;
+background:#f1f5f9;
+border-radius:50%;
+width:34px;
+height:34px
+}
+
+.toast{
+position:fixed;
+right:18px;
+bottom:18px;
+background:#0f172a;
+color:#fff;
+padding:12px 16px;
+border-radius:10px;
+z-index:200;
+display:none
+}
+
+.toast.show{display:block}
+
+.receipt{
+background:#fff;
+padding:25px;
+max-width:700px;
+margin:auto
+}
+
+.receipt h2{
+text-align:center;
+margin:0
+}
+
+.receipt .center{text-align:center}
+
+.receipt table{
+width:100%;
+border-collapse:collapse;
+margin-top:15px
+}
+
+.receipt td{
+padding:7px 3px;
+border-bottom:1px dashed #ccc
+}
+
+.right{text-align:right}
+
+.total{
+font-size:20px;
+font-weight:900
+}
+
+.menu-btn{
+display:none;
+border:0;
+background:#e6f3f1;
+color:var(--primary-dark);
+border-radius:10px;
+padding:9px 12px
+}
+
+.bottomnav{
+display:none;
+position:fixed;
+left:0;
+right:0;
+bottom:0;
+background:#fff;
+border-top:1px solid var(--border);
+z-index:50;
+justify-content:space-around;
+padding:7px
+}
+
+.bottomnav button{
+border:0;
+background:transparent;
+color:#64748b;
+font-size:11px;
+font-weight:800
+}
+
+@media(max-width:1000px){
+.cards{grid-template-columns:repeat(2,1fr)}
+.grid2{grid-template-columns:1fr}
+}
+
+@media(max-width:700px){
+
+.sidebar{
+left:-260px;
+transition:.2s
+}
+
+.sidebar.open{left:0}
+
+.main{
+margin-left:0;
+padding:15px;
+padding-bottom:85px
+}
+
+.menu-btn{
+display:inline-flex
+}
+
+.top h1{font-size:21px}
+
+.cards{grid-template-columns:1fr 1fr}
+
+.form-grid,
+.form-grid.three{
+grid-template-columns:1fr
+}
+
+.bottomnav{display:flex}
+
+.top-right .pill{display:none}
+
+.card{padding:14px}
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="loginView" class="login">
+
+<div class="login-card">
+
+<div class="brand">BizFlow</div>
+
+<div class="tag">
+One platform that grows with every business.
+</div>
+
+<form id="loginForm">
+
+<label>Username</label>
+
+<input
+id="loginUser"
+class="field"
+value="admin"
+required
+autocomplete="username"
+>
+
+<label>Password</label>
+
+<input
+id="loginPass"
+class="field"
+type="password"
+value="Admin@2026!"
+required
+autocomplete="current-password"
+>
+
+<button class="btn full">
+SIGN IN
+</button>
+
+</form>
+
+<div class="notice" style="margin-top:16px">
+
+Demo login:<br>
+<strong>Username: admin</strong><br>
+<strong>Password: Admin@2026!</strong>
+
+</div>
+
+</div>
+</div>
+
+
+<!-- APPLICATION -->
+<div id="app" class="app">
+
+<aside id="sidebar" class="sidebar">
+
+<div class="logo">
+BizFlow
+</div>
+
+<div id="nav" class="nav"></div>
+
+</aside>
+
+
+<main class="main">
+
+<div class="top">
+
+<div style="display:flex;gap:10px;align-items:center">
+
+<button id="menuBtn" class="menu-btn">☰</button>
+
+<div>
+
+<h1 id="pageTitle">Dashboard</h1>
+
+<div id="pageSub"
+style="font-size:12px;color:var(--muted)">
+Business overview
+</div>
+
+</div>
+
+</div>
+
+<div class="top-right">
+
+<span id="businessPill" class="pill">
+My Business
+</span>
+
+<button class="btn secondary small"
+onclick="logout()">
+Logout
+</button>
+
+</div>
+
+</div>
+
+
+<!-- DASHBOARD -->
+<section id="dashboard" class="page active">
+
+<div class="cards">
+
+<div class="card metric">
+<div class="label">Today's Sales</div>
+<div id="mSales" class="value">₦0.00</div>
+<div id="mSalesCount" class="sub">0 transactions</div>
+</div>
+
+<div class="card metric">
+<div class="label">Today's Expenses</div>
+<div id="mExpenses" class="value">₦0.00</div>
+</div>
+
+<div class="card metric">
+<div class="label">Estimated Profit</div>
+<div id="mProfit" class="value">₦0.00</div>
+</div>
+
+<div class="card metric">
+<div class="label">Outstanding Debts</div>
+<div id="mDebt" class="value">₦0.00</div>
+</div>
+
+</div>
+
+
+<div class="grid2">
+
+<div class="card">
+
+<div class="section-title">
+<h3>Sales — Last 7 Days</h3>
+<span id="periodSales" class="pill">₦0.00</span>
+</div>
+
+<div id="salesBars"></div>
+
+</div>
+
+
+<div class="card">
+
+<div class="section-title">
+<h3>Low Stock</h3>
+
+<button class="btn secondary small"
+onclick="showPage('inventory')">
+View
+</button>
+
+</div>
+
+<div id="lowStock"></div>
+
+</div>
+
+</div>
+
+
+<div class="card" style="margin-top:16px">
+
+<div class="section-title">
+
+<h3>Recent Transactions</h3>
+
+<button class="btn secondary small"
+onclick="showPage('sales')">
+View All
+</button>
+
+</div>
+
+<div id="recentTransactions"></div>
+
+</div>
+
+</section>
+
+
+<!-- CUSTOMERS -->
+<section id="customers" class="page">
+
+<div class="card">
+
+<div class="section-title">
+
+<h3>Customers</h3>
+
+<button class="btn"
+onclick="openCustomerModal()">
++ Add Customer
+</button>
+
+</div>
+
+<div class="toolbar">
+
+<input
+id="customerSearch"
+class="field"
+placeholder="Search customer..."
+oninput="renderCustomers()">
+
+</div>
+
+<div id="customersTable"></div>
+
+</div>
+
+</section>
+
+
+<!-- PRODUCTS -->
+<section id="products" class="page">
+
+<div class="card">
+
+<div class="section-title">
+
+<h3>Products</h3>
+
+<button class="btn"
+onclick="openProductModal()">
++ Add Product
+</button>
+
+</div>
+
+<div class="toolbar">
+
+<input
+id="productSearch"
+class="field"
+placeholder="Search product or SKU..."
+oninput="renderProducts()">
+
+</div>
+
+<div id="productsTable"></div>
+
+</div>
+
+</section>
+
+
+<!-- INVENTORY -->
+<section id="inventory" class="page">
+
+<div class="cards">
+
+<div class="card metric">
+<div class="label">Products</div>
+<div id="invProducts" class="value">0</div>
+</div>
+
+<div class="card metric">
+<div class="label">Low Stock</div>
+<div id="invLow" class="value">0</div>
+</div>
+
+<div class="card metric">
+<div class="label">Out of Stock</div>
+<div id="invOut" class="value">0</div>
+</div>
+
+<div class="card metric">
+<div class="label">Stock Value</div>
+<div id="invValue" class="value">₦0</div>
+</div>
+
+</div>
+
+
+<div class="card" style="margin-top:16px">
+
+<div class="section-title">
+
+<h3>Inventory</h3>
+
+<button class="btn secondary"
+onclick="openStockModal()">
+Adjust Stock
+</button>
+
+</div>
+
+<div id="inventoryTable"></div>
+
+</div>
+
+</section>
+
+
+<!-- SALES -->
+<section id="sales" class="page">
+
+<div class="grid2">
+
+<div class="card">
+
+<div class="section-title">
+<h3>New Sale</h3>
+</div>
+
+<label>Customer</label>
+
+<select id="saleCustomer" class="field"></select>
+
+<label>Product</label>
+
+<select
+id="saleProduct"
+class="field"
+onchange="saleProductChanged()">
+</select>
+
+<div class="form-grid">
+
+<div>
+
+<label>Quantity</label>
+
+<input
+id="saleQty"
+class="field"
+type="number"
+min="1"
+value="1">
+
+</div>
+
+<div>
+
+<label>Unit Price</label>
+
+<input
+id="salePrice"
+class="field"
+type="number"
+min="0"
+value="0">
+
+</div>
+
+</div>
+
+<label>Discount</label>
+
+<input
+id="saleDiscount"
+class="field"
+type="number"
+min="0"
+value="0">
+
+<button class="btn full"
+onclick="addToCart()">
+Add to Cart
+</button>
+
+</div>
+
+
+<div class="card">
+
+<div class="section-title">
+
+<h3>Cart</h3>
+
+<span id="cartCount" class="pill">
+0 items
+</span>
+
+</div>
+
+<div id="cartList"></div>
+
+<hr>
+
+<div style="display:flex;justify-content:space-between">
+<span>Subtotal</span>
+<b id="cartSub">₦0</b>
+</div>
+
+<div style="display:flex;justify-content:space-between;margin-top:7px">
+<span>Discount</span>
+<b id="cartDisc">₦0</b>
+</div>
+
+<div style="display:flex;justify-content:space-between;margin-top:7px;font-size:20px">
+<span>Total</span>
+<b id="cartTotal">₦0</b>
+</div>
+
+<label>Payment Received</label>
+
+<input
+id="salePaid"
+class="field"
+type="number"
+min="0"
+value="0">
+
+<label>Payment Method</label>
+
+<select id="saleMethod" class="field">
+
+<option>Cash</option>
+<option>Bank Transfer</option>
+<option>Card</option>
+<option>Mobile Payment</option>
+
+</select>
+
+<button class="btn full"
+onclick="completeSale()">
+Complete Sale
+</button>
+
+</div>
+
+</div>
+
+
+<div class="card" style="margin-top:16px">
+
+<div class="section-title">
+
+<h3>Sales History</h3>
+
+<input
+id="salesSearch"
+class="field"
+placeholder="Search invoice/customer..."
+oninput="renderSales()"
+style="max-width:260px">
+
+</div>
+
+<div id="salesTable"></div>
+
+</div>
+
+</section>
+
+
+<!-- EXPENSES -->
+<section id="expenses" class="page">
+
+<div class="card">
+
+<div class="section-title">
+
+<h3>Expenses</h3>
+
+<button class="btn"
+onclick="openExpenseModal()">
++ Add Expense
+</button>
+
+</div>
+
+<div id="expensesTable"></div>
+
+</div>
+
+</section>
+
+
+<!-- DEBTS -->
+<section id="debts" class="page">
+
+<div class="card">
+
+<div class="section-title">
+
+<h3>Outstanding Debts</h3>
+
+<button class="btn secondary"
+onclick="openPaymentModal()">
++ Record Payment
+</button>
+
+</div>
+
+<div id="debtsTable"></div>
+
+</div>
+
+</section>
+
+
+<!-- REPORTS -->
+<section id="reports" class="page">
+
+<div class="cards">
+
+<div class="card metric">
+<div class="label">All Sales</div>
+<div id="rSales" class="value">₦0</div>
+</div>
+
+<div class="card metric">
+<div class="label">All Expenses</div>
+<div id="rExpenses" class="value">₦0</div>
+</div>
+
+<div class="card metric">
+<div class="label">Net Result</div>
+<div id="rNet" class="value">₦0</div>
+</div>
+
+<div class="card metric">
+<div class="label">Receivables</div>
+<div id="rDebt" class="value">₦0</div>
+</div>
+
+</div>
+
+
+<div class="grid2">
+
+<div class="card">
+
+<div class="section-title">
+<h3>Sales by Product</h3>
+</div>
+
+<div id="productReport"></div>
+
+</div>
+
+
+<div class="card">
+
+<div class="section-title">
+<h3>Expenses by Category</h3>
+</div>
+
+<div id="expenseReport"></div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- USERS -->
+<section id="users" class="page">
+
+<div class="card">
+
+<div class="section-title">
+
+<h3>Users & Roles</h3>
+
+<button class="btn"
+onclick="openUserModal()">
++ Add User
+</button>
+
+</div>
+
+<div class="notice">
+
+Prototype permissions are stored locally.
+Production BizFlow will enforce organization,
+branch and role permissions on the server.
+
+</div>
+
+<div id="usersTable" style="margin-top:14px"></div>
+
+</div>
+
+</section>
+
+
+<!-- SETTINGS -->
+<section id="settings" class="page">
+
+<div class="card">
+
+<div class="section-title">
+<h3>Business Settings</h3>
+</div>
+
+<form id="settingsForm">
+
+<div class="form-grid">
+
+<div>
+
+<label>Business Name</label>
+
+<input id="setName"
+class="field"
+required>
+
+</div>
+
+<div>
+
+<label>Currency Symbol</label>
+
+<input id="setCurrency"
+class="field"
+value="₦">
+
+</div>
+
+<div>
+
+<label>Phone</label>
+
+<input id="setPhone"
+class="field">
+
+</div>
+
+<div>
+
+<label>Email</label>
+
+<input id="setEmail"
+class="field">
+
+</div>
+
+</div>
+
+<label>Address</label>
+
+<textarea
+id="setAddress"
+class="field"
+rows="3"></textarea>
+
+<button class="btn"
+style="margin-top:14px">
+Save Settings
+</button>
+
+</form>
+
+<hr>
+
+<div class="section-title">
+<h3>Data Management</h3>
+</div>
+
+<div class="actions">
+
+<button class="btn secondary"
+onclick="backup()">
+Export Backup
+</button>
+
+<button class="btn secondary"
+onclick="document.getElementById('restoreFile').click()">
+Restore Backup
+</button>
+
+<button class="btn danger"
+onclick="resetData()">
+Reset Demo Data
+</button>
+
+</div>
+
+<input
+id="restoreFile"
+type="file"
+accept=".json"
+hidden
+onchange="restoreBackup(event)">
+
+</div>
+
+</section>
+
+
+<!-- AUDIT -->
+<section id="audit" class="page">
+
+<div class="card">
+
+<div class="section-title">
+<h3>Audit Log</h3>
+</div>
+
+<div id="auditTable"></div>
+
+</div>
+
+</section>
+
+</main>
+
+
+<!-- MOBILE NAV -->
+<div id="bottomnav" class="bottomnav">
+
+<button onclick="showPage('dashboard')">
+⌂<br>Home
+</button>
+
+<button onclick="showPage('sales')">
+＋<br>Sales
+</button>
+
+<button onclick="showPage('inventory')">
+▣<br>Stock
+</button>
+
+<button onclick="showPage('customers')">
+●<br>Customers
+</button>
+
+<button onclick="showPage('settings')">
+☰<br>More
+</button>
+
+</div>
+
+
+<!-- MODAL -->
+<div
+id="modal"
+class="modal"
+onclick="if(event.target===this)closeModal()">
+
+<div class="modal-box" id="modalBox"></div>
+
+</div>
+
+<div id="toast" class="toast"></div>
+
+
+<script>
+
+const DB_KEY="BIZFLOW_MVP_1_DATABASE";
+
+let db=loadDatabase();
+let cart=[];
+let currentPage="dashboard";
+
+
+function createSeedDatabase(){
+
+const now=new Date().toISOString();
+
+return{
+
+business:{
+name:"My Business",
+phone:"",
+email:"",
+address:"",
+currency:"₦"
+},
+
+customers:[
+
+{
+id:"c1",
+name:"Walk-in Customer",
+phone:"",
+email:"",
+address:"",
+createdAt:now
+},
+
+{
+id:"c2",
+name:"Aisha Bello",
+phone:"08000000000",
+email:"",
+address:"Sokoto",
+createdAt:now
+},
+
+{
+id:"c3",
+name:"Musa Ibrahim",
+phone:"08111111111",
+email:"",
+address:"Sokoto",
+createdAt:now
+}
+
+],
+
+products:[
+
+{
+id:"p1",
+name:"Rice 10kg",
+sku:"RICE001",
+category:"Food",
+cost:40000,
+price:45000,
+stock:45,
+min:10,
+createdAt:now
+},
+
+{
+id:"p2",
+name:"Vegetable Oil",
+sku:"OIL001",
+category:"Food",
+cost:7000,
+price:8500,
+stock:12,
+min:10,
+createdAt:now
+},
+
+{
+id:"p3",
+name:"Sugar 1kg",
+sku:"SUG001",
+category:"Food",
+cost:4500,
+price:5500,
+stock:6,
+min:10,
+createdAt:now
+}
+
+],
+
+sales:[],
+expenses:[],
+payments:[],
+
+users:[
+
+{
+id:"u1",
+name:"Administrator",
+email:"admin",
+role:"Owner",
+status:"Active",
+createdAt:now
+}
+
+],
+
+audit:[],
+seq:1000
+
+};
+
+}
+
+
+function loadDatabase(){
+
+try{
+
+const data=
+JSON.parse(
+localStorage.getItem(DB_KEY)
+);
+
+return data||createSeedDatabase();
+
+}catch(e){
+
+return createSeedDatabase();
+
+}
+
+}
+
+
+function saveDatabase(){
+
+localStorage.setItem(
+DB_KEY,
+JSON.stringify(db)
+);
+
+}
+
+
+function money(value){
+
+return(
+db.business.currency||"₦"
+)+Number(value||0).toLocaleString(
+undefined,
+{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+}
+);
+
+}
+
+
+function makeID(prefix){
+
+return prefix+
+Date.now().toString(36)+
+Math.random().toString(36).slice(2,6);
+
+}
+
+
+function today(){
+
+return new Date()
+.toISOString()
+.slice(0,10);
+
+}
+
+
+function escapeHTML(value){
+
+return String(value??"")
+.replace(/[&<>"']/g,function(c){
+
+return{
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#039;"
+}[c];
+
+});
+
+}
+
+
+function showToast(message){
+
+const toast=
+document.getElementById("toast");
+
+toast.textContent=message;
+
+toast.classList.add("show");
+
+setTimeout(
+()=>toast.classList.remove("show"),
+2200
+);
+
+}
+
+
+function audit(action,module,detail){
+
+db.audit.unshift({
+
+id:makeID("a"),
+
+user:"admin",
+
+action,
+module,
+detail,
+
+createdAt:
+new Date().toISOString()
+
+});
+
+db.audit=
+db.audit.slice(0,500);
+
+saveDatabase();
+
+}
+
+
+/* LOGIN */
+
+document
+.getElementById("loginForm")
+.addEventListener(
+"submit",
+function(event){
+
+event.preventDefault();
+
+const username=
+document.getElementById("loginUser")
+.value.trim()
+.toLowerCase();
+
+const password=
+document.getElementById("loginPass")
+.value;
+
+if(username!=="admin"){
+
+alert("Invalid username.");
+
+return;
+
+}
+
+if(password!=="Admin@2026!"){
+
+alert("Invalid password.");
+
+return;
+
+}
+
+sessionStorage.setItem(
+"bizflow_session",
+"1"
+);
+
+openApplication();
+
+}
+);
+
+
+function openApplication(){
+
+document.getElementById("loginView")
+.style.display="none";
+
+document.getElementById("app")
+.style.display="block";
+
+renderNavigation();
+refreshAll();
+
+}
+
+
+function logout(){
+
+sessionStorage.removeItem(
+"bizflow_session"
+);
+
+location.reload();
+
+}
+
+
+if(
+sessionStorage.getItem(
+"bizflow_session"
+)
+){
+
+openApplication();
+
+}
+
+
+/* NAVIGATION */
+
+const navigation=[
+
+["dashboard","⌂","Dashboard"],
+["sales","▣","Sales"],
+["customers","●","Customers"],
+["products","□","Products"],
+["inventory","◫","Inventory"],
+["expenses","−","Expenses"],
+["debts","₦","Debts"],
+["reports","◔","Reports"],
+["users","♙","Users & Roles"],
+["audit","≡","Audit Log"],
+["settings","⚙","Settings"]
+
+];
+
+
+function renderNavigation(){
+
+document.getElementById("nav")
+.innerHTML=
+navigation.map(item=>`
+
+<button
+data-page="${item[0]}"
+onclick="showPage('${item[0]}')">
+
+${item[1]} &nbsp; ${item[2]}
+
+</button>
+
+`).join("");
+
+}
+
+
+function showPage(page){
+
+currentPage=page;
+
+document
+.querySelectorAll(".page")
+.forEach(
+element=>
+element.classList.remove("active")
+);
+
+const section=
+document.getElementById(page);
+
+if(section)
+section.classList.add("active");
+
+const item=
+navigation.find(
+item=>item[0]===page
+);
+
+document.getElementById("pageTitle")
+.textContent=
+item?item[2]:"Dashboard";
+
+document.getElementById("pageSub")
+.textContent=
+page==="dashboard"
+?"Business overview"
+:"Manage "+
+(item?item[2].toLowerCase():"");
+
+document
+.querySelectorAll("#nav button")
+.forEach(button=>
+button.classList.toggle(
+"active",
+button.dataset.page===page
+)
+);
+
+document
+.getElementById("sidebar")
+.classList.remove("open");
+
+refreshAll();
+
+}
+
+
+/* MOBILE MENU */
+
+document
+.getElementById("menuBtn")
+.onclick=function(){
+
+document
+.getElementById("sidebar")
+.classList.toggle("open");
+
+};
+
+
+/* REFRESH */
+
+function refreshAll(){
+
+document.getElementById("businessPill")
+.textContent=db.business.name;
+
+renderDashboard();
+renderCustomers();
+renderProducts();
+renderInventory();
+renderSaleForm();
+renderCart();
+renderSales();
+renderExpenses();
+renderDebts();
+renderReports();
+renderUsers();
+renderSettings();
+renderAudit();
+
+}
+
+
+/* DASHBOARD */
+
+function renderDashboard(){
+
+const currentDate=today();
+
+const todaySales=
+db.sales.filter(
+sale=>
+sale.createdAt.slice(0,10)===
+currentDate
+);
+
+const todayExpenses=
+db.expenses.filter(
+expense=>
+expense.createdAt.slice(0,10)===
+currentDate
+);
+
+const salesAmount=
+todaySales.reduce(
+(total,sale)=>total+sale.total,
+0
+);
+
+const expenseAmount=
+todayExpenses.reduce(
+(total,expense)=>total+expense.amount,
+0
+);
+
+const cost=
+todaySales.reduce(
+(total,sale)=>
+total+
+sale.items.reduce(
+(a,item)=>
+a+(item.qty*item.cost),
+0
+),
+0
+);
+
+const debt=
+db.sales.reduce(
+(total,sale)=>total+sale.balance,
+0
+);
+
+document.getElementById("mSales")
+.textContent=money(salesAmount);
+
+document.getElementById("mSalesCount")
+.textContent=
+todaySales.length+
+" transaction"+
+(todaySales.length===1?"":"s");
+
+document.getElementById("mExpenses")
+.textContent=money(expenseAmount);
+
+document.getElementById("mProfit")
+.textContent=
+money(
+salesAmount-cost-expenseAmount
+);
+
+document.getElementById("mDebt")
+.textContent=money(debt);
+
+
+/* CHART */
+
+const days=[];
+
+for(let i=6;i>=0;i--){
+
+const date=new Date();
+
+date.setDate(
+date.getDate()-i
+);
+
+const dateString=
+date.toISOString().slice(0,10);
+
+const value=
+db.sales
+.filter(
+sale=>
+sale.createdAt.slice(0,10)===
+dateString
+)
+.reduce(
+(total,sale)=>total+sale.total,
+0
+);
+
+days.push({
+date:dateString,
+value
+});
+
+}
+
+const max=Math.max(
+...days.map(day=>day.value),
+1
+);
+
+document.getElementById("periodSales")
+.textContent=
+money(
+days.reduce(
+(total,day)=>total+day.value,
+0
+)
+);
+
+document.getElementById("salesBars")
+.innerHTML=
+days.map(day=>`
+
+<div style="margin:11px 0">
+
+<div style="
+display:flex;
+justify-content:space-between;
+font-size:11px">
+
+<span>${day.date.slice(5)}</span>
+<b>${money(day.value)}</b>
+
+</div>
+
+<div class="bar">
+
+<span style="
+width:${day.value/max*100}%">
+</span>
+
+</div>
+
+</div>
+
+`).join("");
+
+
+/* LOW STOCK */
+
+const lowStock=
+db.products.filter(
+product=>
+product.stock<=product.min
+);
+
+document.getElementById("lowStock")
+.innerHTML=
+lowStock.length
+?
+lowStock.map(product=>`
+
+<div style="
+display:flex;
+justify-content:space-between;
+padding:9px 0;
+border-bottom:1px solid var(--border)">
+
+<span>
+${escapeHTML(product.name)}
+</span>
+
+<span class="badge ${
+product.stock===0?"bad":"warn"
+}">
+
+${product.stock} left
+
+</span>
+
+</div>
+
+`).join("")
+:
+`<div class="empty">
+No low-stock products.
+</div>`;
+
+
+/* RECENT */
+
+const recent=
+db.sales
+.slice()
+.sort(
+(a,b)=>
+new Date(b.createdAt)-
+new Date(a.createdAt)
+)
+.slice(0,6);
+
+document.getElementById("recentTransactions")
+.innerHTML=
+recent.length
+?
+`
+
+<div class="table-wrap">
+
+<table class="table">
+
+<thead>
+
+<tr>
+<th>Invoice</th>
+<th>Customer</th>
+<th>Total</th>
+<th>Paid</th>
+<th>Status</th>
+</tr>
+
+</thead>
+
+<tbody>
+
+${recent.map(sale=>`
+
+<tr>
+
+<td>${sale.invoice}</td>
+
+<td>
+${escapeHTML(
+customerName(sale.customerId)
+)}
+</td>
+
+<td>${money(sale.total)}</td>
+
+<td>${money(sale.paid)}</td>
+
+<td>
+
+<span class="badge ${
+sale.balance>0?"warn":"ok"
+}">
+
+${sale.balance>0?"Credit":"Paid"}
+
+</span>
+
+</td>
+
+</tr>
+
+`).join("")}
+
+</tbody>
+
+</table>
+
+</div>
+`
+:
+`<div class="empty">
+No sales yet. Make your first sale.
+</div>`;
+
+}
+
+
+function customerName(id){
+
+return db.customers.find(
+customer=>customer.id===id
+)?.name||"Unknown";
+
+}
+
+
+/* CUSTOMERS */
+
+function renderCustomers(){
+
+const search=
+(
+document.getElementById(
+"customerSearch"
+)?.value||""
+).toLowerCase();
+
+const customers=
+db.customers.filter(customer=>
+(
+customer.name+
+" "+
+customer.phone+
+" "+
+customer.email
+)
+.toLowerCase()
+.includes(search)
+);
+
+document.getElementById("customersTable")
+.innerHTML=
+customers.length
+?
+`
+
+<div class="table-wrap">
+
+<table class="table">
+
+<thead>
+
+<tr>
+<th>Customer</th>
+<th>Phone</th>
+<th>Purchases</th>
+<th>Outstanding</th>
+<th>Action</th>
+</tr>
+
+</thead>
+
+<tbody>
+
+${customers.map(customer=>{
+
+const sales=
+db.sales.filter(
+sale=>
+sale.customerId===
+customer.id
+);
+
+const total=
+sales.reduce(
+(a,s)=>a+s.total,
+0
+);
+
+const balance=
+sales.reduce(
+(a,s)=>a+s.balance,
+0
+);
+
+return`
+
+<tr>
+
+<td>
+
+<b>
+${escapeHTML(customer.name)}
+</b>
+
+<br>
+
+<small>
+${escapeHTML(customer.email||"")}
+</small>
+
+</td>
+
+<td>
+${escapeHTML(customer.phone)}
+</td>
+
+<td>${money(total)}</td>
+
+<td>
+
+<span class="badge ${
+balance>0?"warn":"ok"
+}">
+
+${money(balance)}
+
+</span>
+
+</td>
+
+<td>
+
+<button
+class="btn small secondary"
+onclick="editCustomer('${customer.id}')">
+Edit
+</button>
+
+${
+customer.id!=="c1"
+?
+`
+<button
+class="btn small danger"
+onclick="deleteCustomer('${customer.id}')">
+Delete
+</button>
+`
+:""
+}
+
+</td>
+
+</tr>
+
+`;
+
+}).join("")}
+
+</tbody>
+
+</table>
+
+</div>
+
+`
+:
+`<div class="empty">
+No customers found.
+</div>`;
+
+}
+
+
+function openCustomerModal(customer={}){
+
+document.getElementById("modalBox")
+.innerHTML=`
+
+<div class="modal-head">
+
+<h2>
+${customer.id?"Edit":"Add"} Customer
+</h2>
+
+<button class="x"
+onclick="closeModal()">×</button>
+
+</div>
+
+<form
+onsubmit="saveCustomer(event,'${customer.id||""}')">
+
+<div class="form-grid">
+
+<div>
+
+<label>Name</label>
+
+<input
+id="fName"
+class="field"
+required
+value="${escapeHTML(customer.name||"")}">
+
+</div>
+
+<div>
+
+<label>Phone</label>
+
+<input
+id="fPhone"
+class="field"
+value="${escapeHTML(customer.phone||"")}">
+
+</div>
+
+<div>
+
+<label>Email</label>
+
+<input
+id="fEmail"
+class="field"
+type="email"
+value="${escapeHTML(customer.email||"")}">
+
+</div>
+
+<div>
+
+<label>Address</label>
+
+<input
+id="fAddress"
+class="field"
+value="${escapeHTML(customer.address||"")}">
+
+</div>
+
+</div>
+
+<button class="btn full">
+Save Customer
+</button>
+
+</form>
+
+`;
+
+openModal();
+
+}
+
+
+function saveCustomer(event,id){
+
+event.preventDefault();
+
+let customer;
+
+if(id){
+
+customer=db.customers.find(
+item=>item.id===id
+);
+
+}else{
+
+customer={
+id:makeID("c"),
+createdAt:new Date().toISOString()
+};
+
+db.customers.push(customer);
+
+}
+
+customer.name=
+document.getElementById("fName")
+.value.trim();
+
+customer.phone=
+document.getElementById("fPhone")
+.value.trim();
+
+customer.email=
+document.getElementById("fEmail")
+.value.trim();
+
+customer.address=
+document.getElementById("fAddress")
+.value.trim();
+
+saveDatabase();
+
+audit(
+id?"Updated customer":"Created customer",
+"Customers",
+customer.name
+);
+
+closeModal();
+
+showToast("Customer saved");
+
+refreshAll();
+
+}
+
+
+function editCustomer(id){
+
+openCustomerModal(
+db.customers.find(
+customer=>customer.id===id
+)
+);
+
+}
+
+
+function deleteCustomer(id){
+
+if(!confirm("Delete this customer?"))
+return;
+
+db.customers=
+db.customers.filter(
+customer=>customer.id!==id
+);
+
+saveDatabase();
+
+audit(
+"Deleted customer",
+"Customers",
+id
+);
+
+refreshAll();
+
+}
+
+
+/* PRODUCTS */
+
+function renderProducts(){
+
+const search=
+(
+document.getElementById(
+"productSearch"
+)?.value||""
+).toLowerCase();
+
+const products=
+db.products.filter(product=>
+(
+product.name+
+" "+
+product.sku+
+" "+
+product.category
+)
+.toLowerCase()
+.includes(search)
+);
+
+document.getElementById("productsTable")
+.innerHTML=
+products.length
+?
+`
+
+<div class="table-wrap">
+
+<table class="table">
+
+<thead>
+
+<tr>
+<th>Product</th>
+<th>SKU</th>
+<th>Cost</th>
+<th>Price</th>
+<th>Stock</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+
+</thead>
+
+<tbody>
+
+${products.map(product=>`
+
+<tr>
+
+<td>
+
+<b>
+${escapeHTML(product.name)}
+</b>
+
+<br>
+
+<small>
+${escapeHTML(product.category||"")}
+</small>
+
+</td>
+
+<td>${escapeHTML(product.sku)}</td>
+
+<td>${money(product.cost)}</td>
+<td>${money(product.price)}</td>
+<td>${product.stock}</td>
+
+<td>
+
+<span class="badge ${
+product.stock===0
+?"bad"
+:
+product.stock<=product.min
+?"warn"
+:"ok"
+}">
+
+${
+product.stock===0
+?"Out"
+:
+product.stock<=product.min
+?"Low"
+:"Good"
+}
+
+</span>
+
+</td>
+
+<td>
+
+<button
+class="btn small secondary"
+onclick="editProduct('${product.id}')">
+Edit
+</button>
+
+<button
+class="btn small danger"
+onclick="deleteProduct('${product.id}')">
+Delete
+</button>
+
+</td>
+
+</tr>
+
+`).join("")}
+
+</tbody>
+
+</table>
+
+</div>
+`
+:
+`<div class="empty">
+No products found.
+</div>`;
+
+}
+
+
+function openProductModal(product={}){
+
+document.getElementById("modalBox")
+.innerHTML=`
+
+<div class="modal-head">
+
+<h2>
+${product.id?"Edit":"Add"} Product
+</h2>
+
+<button class="x"
+onclick="closeModal()">×</button>
+
+</div>
+
+<form
+onsubmit="saveProduct(event,'${product.id||""}')">
+
+<div class="form-grid">
+
+<div>
+
+<label>Product Name</label>
+
+<input
+id="pfName"
+class="field"
+required
+value="${escapeHTML(product.name||"")}">
+
+</div>
+
+<div>
+
+<label>SKU</label>
+
+<input
+id="pfSku"
+class="field"
+required
+value="${escapeHTML(product.sku||"")}">
+
+</div>
+
+<div>
+
+<label>Category</label>
+
+<input
+id="pfCat"
+class="field"
+value="${escapeHTML(product.category||"")}">
+
+</div>
+
+<div>
+
+<label>Cost Price</label>
+
+<input
+id="pfCost"
+class="field"
+type="number"
+min="0"
+required
+value="${product.cost??0}">
+
+</div>
+
+<div>
+
+<label>Selling Price</label>
+
+<input
+id="pfPrice"
+class="field"
+type="number"
+min="0"
+required
+value="${product.price??0}">
+
+</div>
+
+<div>
+
+<label>Stock Quantity</label>
+
+<input
+id="pfStock"
+class="field"
+type="number"
+min="0"
+required
+value="${product.stock??0}"
+${product.id?"readonly":""}>
+
+</div>
+
+<div>
+
+<label>Minimum Stock</label>
+
+<input
+id="pfMin"
+class="field"
+type="number"
+min="0"
+value="${product.min??5}">
+
+</div>
+
+</div>
+
+<button class="btn full">
+Save Product
+</button>
+
+</form>
+
+`;
+
+openModal();
+
+}
+
+
+function saveProduct(event,id){
+
+event.preventDefault();
+
+let product;
+
+if(id){
+
+product=db.products.find(
+item=>item.id===id
+);
+
+}else{
+
+product={
+id:makeID("p"),
+createdAt:new Date().toISOString(),
+stock:Number(
+document.getElementById("pfStock").value
+)
+};
+
+db.products.push(product);
+
+}
+
+product.name=
+document.getElementById("pfName").value.trim();
+
+product.sku=
+document.getElementById("pfSku").value.trim();
+
+product.category=
+document.getElementById("pfCat").value.trim();
+
+product.cost=
+Number(
+document.getElementById("pfCost").value
+);
+
+product.price=
+Number(
+document.getElementById("pfPrice").value
+);
+
+product.min=
+Number(
+document.getElementById("pfMin").value
+);
+
+saveDatabase();
+
+audit(
+id?"Updated product":"Created product",
+"Products",
+product.name
+);
+
+closeModal();
+
+showToast("Product saved");
+
+refreshAll();
+
+}
+
+
+function editProduct(id){
+
+openProductModal(
+db.products.find(
+product=>product.id===id
+)
+);
+
+}
+
+
+function deleteProduct(id){
+
+if(!confirm("Delete this product?"))
+return;
+
+db.products=
+db.products.filter(
+product=>product.id!==id
+);
+
+saveDatabase();
+
+audit(
+"Deleted product",
+"Products",
+id
+);
+
+refreshAll();
+
+}
+
+
+/* INVENTORY */
+
+function renderInventory(){
+
+const low=
+db.products.filter(
+product=>
+product.stock>0 &&
+product.stock<=product.min
+).length;
+
+const out=
+db.products.filter(
+product=>product.stock===0
+).length;
+
+const value=
+db.products.reduce(
+(total,product)=>
+total+
+product.stock*product.cost,
+0
+);
+
+document.getElementById("invProducts")
+.textContent=db.products.length;
+
+document.getElementById("invLow")
+.textContent=low;
+
+document.getElementById("invOut")
+.textContent=out;
+
+document.getElementById("invValue")
+.textContent=money(value);
+
+document.getElementById("inventoryTable")
+.innerHTML=
+db.products.length
+?
+`
+
+<div class="table-wrap">
+
+<table class="table">
+
+<thead>
+
+<tr>
+<th>Product</th>
+<th>SKU</th>
+<th>Stock</th>
+<th>Minimum</th>
+<th>Value</th>
+<th>Status</th>
+</tr>
+
+</thead>
+
+<tbody>
+
+${db.products.map(product=>`
+
+<tr>
+
+<td>${escapeHTML(product.name)}</td>
+<td>${escapeHTML(product.sku)}</td>
+<td>${product.stock}</td>
+<td>${product.min}</td>
+<td>${money(product.stock*product.cost)}</td>
+
+<td>
+
+<span class="badge ${
+product.stock===0
+?"bad"
+:
+product.stock<=product.min
+?"warn"
+:"ok"
+}">
+
+${
+product.stock===0
+?"Out of stock"
+:
+product.stock<=product.min
+?"Low stock"
+:"Healthy"
+}
+
+</span>
+
+</td>
+
+</tr>
+
+`).join("")}
+
+</tbody>
+
+</table>
+
+</div>
+`
+:
+`<div class="empty">
+No products.
+</div>`;
+
+}
+
+
+function openStockModal(){
+
+document.getElementById("modalBox")
+.innerHTML=`
+
+<div class="modal-head">
+
+<h2>Adjust Stock</h2>
+
+<button class="x"
+onclick="closeModal()">×</button>
+
+</div>
+
+<form onsubmit="adjustStock(event)">
+
+<label>Product</label>
+
+<select
+id="sfProduct"
+class="field">
+
+${db.products.map(product=>`
+
+<option value="${product.id}">
+
+${escapeHTML(product.name)}
+—
+${product.stock} available
+
+</option>
+
+`).join("")}
+
+</select>
+
+<label>Adjustment</label>
+
+<input
+id="sfQty"
+class="field"
+type="number"
+required
+placeholder="Use -5 to remove, +10 to add">
+
+<label>Reason</label>
+
+<input
+id="sfReason"
+class="field"
+required
+placeholder="Received, damaged, stock count...">
+
+<button class="btn full">
+Save Adjustment
+</button>
+
+</form>
+
+`;
+
+openModal();
+
+}
+
+
+function adjustStock(event){
+
+event.preventDefault();
+
+const product=
+db.products.find(
+item=>
+item.id===
+document.getElementById("sfProduct")
+.value
+);
+
+const quantity=
+Number(
+document.getElementById("sfQty").value
+);
+
+if(!product){
+
+alert("Select a product.");
+return;
+
+}
+
+if(product.stock+quantity<0){
+
+alert("Stock cannot become negative.");
+return;
+
+}
+
+product.stock+=quantity;
+
+saveDatabase();
+
+audit(
+"Stock adjustment",
+"Inventory",
+product.name+
+": "+
+quantity+
+" ("+
+document.getElementById("sfReason")
+.value+
+")"
+);
+
+closeModal();
+
+showToast("Stock updated");
+
+refreshAll();
+
+}
+
+
+/* SALES */
+
+function saleTotals(){
+
+const subtotal=
+cart.reduce(
+(total,item)=>
+total+
+item.qty*item.price,
+0
+);
+
+const discount=
+cart.reduce(
+(total,item)=>
+total+item.discount,
+0
+);
+
+return{
+subtotal,
+discount,
+total:Math.max(
+0,
+subtotal-discount
+)
+};
+
+}
+
+
+function renderSaleForm(){
+
+document.getElementById("saleCustomer")
+.innerHTML=
+db.customers.map(
+customer=>`
+<option value="${customer.id}">
+${escapeHTML(customer.name)}
+</option>
+`
+).join("");
+
+document.getElementById("saleProduct")
+.innerHTML=
+`
+<option value="">
+Select product
+</option>
+`+
+db.products.map(
+product=>`
+<option value="${product.id}">
+${escapeHTML(product.name)}
+—
+${money(product.price)}
+—
+${product.stock} in stock
+</option>
+`
+).join("");
+
+}
+
+
+function saleProductChanged(){
+
+const product=
+db.products.find(
+item=>
+item.id===
+document.getElementById("saleProduct").value
+);
+
+document.getElementById("salePrice")
+.value=
+product?product.price:0;
+
+}
+
+
+function addToCart(){
+
+const product=
+db.products.find(
+item=>
+item.id===
+document.getElementById("saleProduct").value
+);
+
+const quantity=
+Number(
+document.getElementById("saleQty").value
+);
+
+const price=
+Number(
+document.getElementById("salePrice").value
+);
+
+const discount=
+Number(
+document.getElementById("saleDiscount").value
+);
+
+if(!product){
+
+alert("Select a product.");
+return;
+
+}
+
+if(quantity<1){
+
+alert("Quantity must be at least 1.");
+return;
+
+}
+
+if(quantity>product.stock){
+
+alert("Quantity exceeds available stock.");
+return;
+
+}
+
+if(price<0||discount<0){
+
+alert("Invalid amount.");
+return;
+
+}
+
+const existing=
+cart.find(
+item=>item.productId===product.id
+);
+
+if(existing){
+
+if(existing.qty+quantity>product.stock){
+
+alert("Quantity exceeds stock.");
+return;
+
+}
+
+existing.qty+=quantity;
+existing.discount+=discount;
+
+}else{
+
+cart.push({
+
+productId:product.id,
+name:product.name,
+qty:quantity,
+price,
+cost:product.cost,
+discount
+
+});
+
+}
+
+document.getElementById("saleQty")
+.value=1;
+
+document.getElementById("saleDiscount")
+.value=0;
+
+renderCart();
+
+showToast("Added to cart");
+
+}
+
+
+function renderCart(){
+
+const totals=saleTotals();
+
+document.getElementById("cartCount")
+.textContent=
+cart.reduce(
+(total,item)=>total+item.qty,
+0
+)+" items";
+
+document.getElementById("cartSub")
+.textContent=money(totals.subtotal);
+
+document.getElementById("cartDisc")
+.textContent=money(totals.discount);
+
+document.getElementById("cartTotal")
+.textContent=money(totals.total);
+
+document.getElementById("cartList")
+.innerHTML=
+cart.length
+?
+cart.map((item,index)=>`
+
+<div style="
+display:flex;
+justify-content:space-between;
+gap:8px;
+padding:10px 0;
+border-bottom:1px solid var(--border)">
+
+<div>
+
+<b>
+${escapeHTML(item.name)}
+</b>
+
+<br>
+
+<small>
+
+${item.qty}
+×
+${money(item.price)}
+
+${
+item.discount
+?
+" · discount "+money(item.discount)
+:""
+}
+
+</small>
+
+</div>
+
+<div>
+
+<b>
+${money(
+item.qty*item.price-item.discount
+)}
+</b>
+
+<br>
+
+<button
+class="btn small danger"
+onclick="removeCartItem(${index})">
+Remove
+</button>
+
+</div>
+
+</div>
+
+`).join("")
+:
+`<div class="empty">
+Cart is empty.
+</div>`;
+
+}
+
+
+function removeCartItem(index){
+
+cart.splice(index,1);
+renderCart();
+
+}
+
+
+function completeSale(){
+
+if(!cart.length){
+
+alert("Cart is empty.");
+return;
+
+}
+
+const totals=saleTotals();
+
+const paid=
+Number(
+document.getElementById("salePaid").value
+);
+
+if(paid<0||paid>totals.total){
+
+alert(
+"Payment must be between zero and the total."
+);
+
+return;
+
+}
+
+for(const item of cart){
+
+const product=
+db.products.find(
+p=>p.id===item.productId
+);
+
+if(!product||product.stock<item.qty){
+
+alert(
+"Stock changed. Please review the cart."
+);
+
+return;
+
+}
+
+}
+
+const invoice=
+"INV-"+(++db.seq);
+
+const sale={
+
+id:makeID("s"),
+
+invoice,
+
+customerId:
+document.getElementById(
+"saleCustomer"
+).value,
+
+items:cart.map(
+item=>({...item})
+),
+
+subtotal:totals.subtotal,
+
+discount:totals.discount,
+
+total:totals.total,
+
+paid,
+
+balance:
+totals.total-paid,
+
+method:
+document.getElementById("saleMethod").value,
+
+createdAt:
+new Date().toISOString()
+
+};
+
+sale.items.forEach(item=>{
+
+const product=
+db.products.find(
+p=>p.id===item.productId
+);
+
+product.stock-=item.qty;
+
+});
+
+db.sales.unshift(sale);
+
+if(paid>0){
+
+db.payments.unshift({
+
+id:makeID("pay"),
+
+saleId:sale.id,
+
+customerId:sale.customerId,
+
+amount:paid,
+
+method:sale.method,
+
+createdAt:
+new Date().toISOString()
+
+});
+
+}
+
+saveDatabase();
+
+audit(
+"Created sale",
+"Sales",
+invoice+
+" "+
+money(totals.total)
+);
+
+cart=[];
+
+document.getElementById("salePaid")
+.value=0;
+
+renderCart();
+
+refreshAll();
+
+showToast("Sale completed");
+
+openReceipt(sale.id);
+
+}
+
+
+/* SALES HISTORY */
+
+function renderSales(){
+
+const search=
+(
+document.getElementById(
+"salesSearch"
+)?.value||""
+).toLowerCase();
+
+const sales=
+db.sales.filter(sale=>
+(
+sale.invoice+
+" "+
+customerName(sale.customerId)
+)
+.toLowerCase()
+.includes(search)
+);
+
+document.getElementById("salesTable")
+.innerHTML=
+sales.length
+?
+`
+
+<div class="table-wrap">
+
+<table class="table">
+
+<thead>
+
+<tr>
+<th>Invoice</th>
+<th>Date</th>
+<th>Customer</th>
+<th>Total</th>
+<th>Paid</th>
+<th>Balance</th>
+<th>Action</th>
+</tr>
+
+</thead>
+
+<tbody>
+
+${sales.map(sale=>`
+
+<tr>
+
+<td>${sale.invoice}</td>
+
+<td>
+${new Date(
+sale.createdAt
+).toLocaleString()}
+</td>
+
+<td>
+${escapeHTML(
+customerName(sale.customerId)
+)}
+</td>
+
+<td>${money(sale.total)}</td>
+<td>${money(sale.paid)}</td>
+<td>${money(sale.balance)}</td>
+
+<td>
+
+<button
+class="btn small secondary"
+onclick="openReceipt('${sale.id}')">
+Receipt
+</button>
+
+</td>
+
+</tr>
+
+`).join("")}
+
+</tbody>
+
+</table>
+
+</div>
+`
+:
+`<div class="empty">
+No sales found.
+</div>`;
+
+}
+
+
+/* EXPENSES */
+
+function renderExpenses(){
+
+document.getElementById("expensesTable")
+.innerHTML=
+db.expenses.length
+?
+`
+
+<div class="table-wrap">
+
+<table class="table">
+
+<thead>
+
+<tr>
+<th>Date</th>
+<th>Category</th>
+<th>Description</th>
+<th>Amount</th>
+<th>Action</th>
+</tr>
+
+</thead>
+
+<tbody>
+
+${db.expenses.map(expense=>`
+
+<tr>
+
+<td>
+${new Date(
+expense.createdAt
+).toLocaleDateString()}
+</td>
+
+<td>
+${escapeHTML(expense.category)}
+</td>
+
+<td>
+${escapeHTML(expense.description)}
+</td>
+
+<td>
+${money(expense.amount)}
+</td>
+
+<td>
+
+<button
+class="btn small danger"
+onclick="deleteExpense('${expense.id}')">
+Delete
+</button>
+
+</td>
+
+</tr>
+
+`).join("")}
+
+</tbody>
+
+</table>
+
+</div>
+`
+:
+`<div class="empty">
+No expenses recorded.
+</div>`;
+
+}
+
+
+function openExpenseModal(){
+
+document.getElementById("modalBox")
+.innerHTML=`
+
+<div class="modal-head">
+
+<h2>Add Expense</h2>
+
+<button class="x"
+onclick="closeModal()">×</button>
+
+</div>
+
+<form onsubmit="saveExpense(event)">
+
+<div class="form-grid">
+
+<div>
+
+<label>Category</label>
+
+<select
+id="efCat"
+class="field">
+
+<option>Rent</option>
+<option>Transport</option>
+<option>Electricity</option>
+<option>Salaries</option>
+<option>Marketing</option>
+<option>Internet</option>
+<option>Maintenance</option>
+<option>Supplies</option>
+<option>Tax</option>
+<option>Other</option>
+
+</select>
+
+</div>
+
+<div>
+
+<label>Amount</label>
+
+<input
+id="efAmount"
+class="field"
+type="number"
+min="0"
+required>
+
+</div>
+
+</div>
+
+<label>Description</label>
+
+<input
+id="efDesc"
+class="field"
+required>
+
+<button class="btn full">
+Save Expense
+</button>
+
+</form>
+
+`;
+
+openModal();
+
+}
+
+
+function saveExpense(event){
+
+event.preventDefault();
+
+const expense={
+
+id:makeID("e"),
+
+category:
+document.getElementById("efCat").value,
+
+amount:
+Number(
+document.getElementById("efAmount").value
+),
+
+description:
+document.getElementById("efDesc")
+.value.trim(),
+
+createdAt:
+new Date().toISOString()
+
+};
+
+db.expenses.unshift(expense);
+
+saveDatabase();
+
+audit(
+"Created expense",
+"Expenses",
+expense.category+
+" "+
+money(expense.amount)
+);
+
+closeModal();
+
+showToast("Expense saved");
+
+refreshAll();
+
+}
+
+
+function deleteExpense(id){
+
+if(!confirm("Delete this expense?"))
+return;
+
+db.expenses=
+db.expenses.filter(
+expense=>expense.id!==id
+);
+
+saveDatabase();
+
+audit(
+"Deleted expense",
+"Expenses",
+id
+);
+
+refreshAll();
+
+}
+
+
+/* DEBTS */
+
+function renderDebts(){
+
+const debts=
+db.sales.filter(
+sale=>sale.balance>0
+);
+
+document.getElementById("debtsTable")
+.innerHTML=
+debts.length
+?
+`
+
+<div class="table-wrap">
+
+<table class="table">
+
+<thead>
+
+<tr>
+<th>Invoice</th>
+<th>Customer</th>
+<th>Total</th>
+<th>Paid</th>
+<th>Balance</th>
+<th>Action</th>
+</tr>
+
+</thead>
+
+<tbody>
+
+${debts.map(sale=>`
+
+<tr>
+
+<td>${sale.invoice}</td>
+
+<td>
+${escapeHTML(
+customerName(sale.customerId)
+)}
+</td>
+
+<td>${money(sale.total)}</td>
+<td>${money(sale.paid)}</td>
+
+<td>
+
+<span class="badge warn">
+${money(sale.balance)}
+</span>
+
+</td>
+
+<td>
+
+<button
+class="btn small"
+onclick="openPaymentModal('${sale.id}')">
+Record Payment
+</button>
+
+</td>
+
+</tr>
+
+`).join("")}
+
+</tbody>
+
+</table>
+
+</div>
+`
+:
+`<div class="empty">
+No outstanding debts.
+</div>`;
+
+}
+
+
+function openPaymentModal(saleID=""){
+
+const sale=
+saleID
+?
+db.sales.find(
+item=>item.id===saleID
+)
+:null;
+
+document.getElementById("modalBox")
+.innerHTML=`
+
+<div class="modal-head">
+
+<h2>Record Payment</h2>
+
+<button class="x"
+onclick="closeModal()">×</button>
+
+</div>
+
+<form onsubmit="savePayment(event)">
+
+<label>Invoice</label>
+
+<select
+id="paySale"
+class="field">
+
+${db.sales
+.filter(sale=>sale.balance>0)
+.map(sale=>`
+
+<option
+value="${sale.id}"
+${sale.id===saleID?"selected":""}>
+
+${sale.invoice}
+—
+${escapeHTML(
+customerName(sale.customerId)
+)}
+—
+${money(sale.balance)}
+
+</option>
+
+`).join("")}
+
+</select>
+
+<label>Amount</label>
+
+<input
+id="payAmount"
+class="field"
+type="number"
+min="0"
+required
+value="${sale?sale.balance:0}">
+
+<label>Method</label>
+
+<select
+id="payMethod"
+class="field">
+
+<option>Cash</option>
+<option>Bank Transfer</option>
+<option>Card</option>
+<option>Mobile Payment</option>
+
+</select>
+
+<button class="btn full">
+Save Payment
+</button>
+
+</form>
+
+`;
+
+openModal();
+
+}
+
+
+function savePayment(event){
+
+event.preventDefault();
+
+const sale=
+db.sales.find(
+item=>
+item.id===
+document.getElementById("paySale")
+.value
+);
+
+const amount=
+Number(
+document.getElementById("payAmount")
+.value
+);
+
+if(!sale){
+
+alert("Select an invoice.");
+return;
+
+}
+
+if(amount<=0||amount>sale.balance){
+
+alert("Invalid payment.");
+return;
+
+}
+
+sale.paid+=amount;
+sale.balance-=amount;
+
+db.payments.unshift({
+
+id:makeID("pay"),
+
+saleId:sale.id,
+
+customerId:sale.customerId,
+
+amount,
+
+method:
+document.getElementById("payMethod").value,
+
+createdAt:
+new Date().toISOString()
+
+});
+
+saveDatabase();
+
+audit(
+"Recorded payment",
+"Payments",
+sale.invoice+
+" "+
+money(amount)
+);
+
+closeModal();
+
+showToast("Payment recorded");
+
+refreshAll();
+
+}
+
+
+/* REPORTS */
+
+function renderReports(){
+
+const totalSales=
+db.sales.reduce(
+(total,sale)=>total+sale.total,
+0
+);
+
+const totalExpenses=
+db.expenses.reduce(
+(total,expense)=>total+expense.amount,
+0
+);
+
+const totalCost=
+db.sales.reduce(
+(total,sale)=>
+total+
+sale.items.reduce(
+(sum,item)=>
+sum+
+item.qty*item.cost,
+0
+),
+0
+);
+
+const debt=
+db.sales.reduce(
+(total,sale)=>total+sale.balance,
+0
+);
+
+document.getElementById("rSales")
+.textContent=money(totalSales);
+
+document.getElementById("rExpenses")
+.textContent=money(totalExpenses);
+
+document.getElementById("rNet")
+.textContent=
+money(
+totalSales-
+totalCost-
+totalExpenses
+);
+
+document.getElementById("rDebt")
+.textContent=money(debt);
+
+
+/* PRODUCT REPORT */
+
+const productMap={};
+
+db.sales.forEach(sale=>{
+
+sale.items.forEach(item=>{
+
+productMap[item.name]=
+(productMap[item.name]||0)+
+(
+item.qty*item.price-
+item.discount
+);
+
+});
+
+});
+
+document.getElementById("productReport")
+.innerHTML=
+Object.entries(productMap)
+.sort((a,b)=>b[1]-a[1])
+.map(entry=>`
+
+<div style="
+display:flex;
+justify-content:space-between;
+padding:9px 0;
+border-bottom:1px solid var(--border)">
+
+<span>
+${escapeHTML(entry[0])}
+</span>
+
+<b>
+${money(entry[1])}
+</b>
+
+</div>
+
+`).join("")
+||
+`<div class="empty">
+No sales data.
+</div>`;
+
+
+/* EXPENSE REPORT */
+
+const expenseMap={};
+
+db.expenses.forEach(expense=>{
+
+expenseMap[expense.category]=
+(expenseMap[expense.category]||0)+
+expense.amount;
+
+});
+
+document.getElementById("expenseReport")
+.innerHTML=
+Object.entries(expenseMap)
+.sort((a,b)=>b[1]-a[1])
+.map(entry=>`
+
+<div style="
+display:flex;
+justify-content:space-between;
+padding:9px 0;
+border-bottom:1px solid var(--border)">
+
+<span>
+${escapeHTML(entry[0])}
+</span>
+
+<b>
+${money(entry[1])}
+</b>
+
+</div>
+
+`).join("")
+||
+`<div class="empty">
+No expense data.
+</div>`;
+
+}
+
+
+/* USERS */
+
+function renderUsers(){
+
+document.getElementById("usersTable")
+.innerHTML=`
+
+<div class="table-wrap">
+
+<table class="table">
+
+<thead>
+
+<tr>
+<th>Name</th>
+<th>Username</th>
+<th>Role</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+
+</thead>
+
+<tbody>
+
+${db.users.map(user=>`
+
+<tr>
+
+<td>${escapeHTML(user.name)}</td>
+<td>${escapeHTML(user.email)}</td>
+<td>${escapeHTML(user.role)}</td>
+
+<td>
+
+<span class="badge ok">
+${escapeHTML(user.status)}
+</span>
+
+</td>
+
+<td>
+
+${
+user.id==="u1"
+?"—"
+:
+`
+<button
+class="btn small danger"
+onclick="deleteUser('${user.id}')">
+Delete
+</button>
+`
+}
+
+</td>
+
+</tr>
+
+`).join("")}
+
+</tbody>
+
+</table>
+
+</div>
+
+`;
+
+}
+
+
+function openUserModal(){
+
+document.getElementById("modalBox")
+.innerHTML=`
+
+<div class="modal-head">
+
+<h2>Add User</h2>
+
+<button class="x"
+onclick="closeModal()">×</button>
+
+</div>
+
+<form onsubmit="saveUser(event)">
+
+<div class="form-grid">
+
+<div>
+
+<label>Name</label>
+
+<input
+id="ufName"
+class="field"
+required>
+
+</div>
+
+<div>
+
+<label>Username</label>
+
+<input
+id="ufEmail"
+class="field"
+required>
+
+</div>
+
+<div>
+
+<label>Role</label>
+
+<select
+id="ufRole"
+class="field">
+
+<option>Manager</option>
+<option>Accountant</option>
+<option>Sales Manager</option>
+<option>Cashier</option>
+<option>Inventory Manager</option>
+<option>Staff</option>
+<option>Auditor</option>
+
+</select>
+
+</div>
+
+<div>
+
+<label>Status</label>
+
+<select
+id="ufStatus"
+class="field">
+
+<option>Active</option>
+<option>Inactive</option>
+
+</select>
+
+</div>
+
+</div>
+
+<button class="btn full">
+Create User
+</button>
+
+</form>
+
+`;
+
+openModal();
+
+}
+
+
+function saveUser(event){
+
+event.preventDefault();
+
+const user={
+
+id:makeID("u"),
+
+name:
+document.getElementById("ufName")
+.value.trim(),
+
+email:
+document.getElementById("ufEmail")
+.value.trim(),
+
+role:
+document.getElementById("ufRole")
+.value,
+
+status:
+document.getElementById("ufStatus")
+.value,
+
+createdAt:
+new Date().toISOString()
+
+};
+
+db.users.push(user);
+
+saveDatabase();
+
+audit(
+"Created user",
+"Users",
+user.email
+);
+
+closeModal();
+
+showToast("User created");
+
+refreshAll();
+
+}
+
+
+function deleteUser(id){
+
+if(!confirm("Delete this user?"))
+return;
+
+db.users=
+db.users.filter(
+user=>user.id!==id
+);
+
+saveDatabase();
+
+audit(
+"Deleted user",
+"Users",
+id
+);
+
+refreshAll();
+
+}
+
+
+/* SETTINGS */
+
+function renderSettings(){
+
+document.getElementById("setName")
+.value=db.business.name;
+
+document.getElementById("setCurrency")
+.value=db.business.currency;
+
+document.getElementById("setPhone")
+.value=db.business.phone;
+
+document.getElementById("setEmail")
+.value=db.business.email;
+
+document.getElementById("setAddress")
+.value=db.business.address;
+
+}
+
+
+document.getElementById("settingsForm")
+.addEventListener(
+"submit",
+function(event){
+
+event.preventDefault();
+
+db.business={
+
+name:
+document.getElementById("setName")
+.value.trim(),
+
+currency:
+document.getElementById("setCurrency")
+.value||"₦",
+
+phone:
+document.getElementById("setPhone")
+.value.trim(),
+
+email:
+document.getElementById("setEmail")
+.value.trim(),
+
+address:
+document.getElementById("setAddress")
+.value.trim()
+
+};
+
+saveDatabase();
+
+audit(
+"Updated business settings",
+"Settings",
+db.business.name
+);
+
+showToast("Settings saved");
+
+refreshAll();
+
+}
+);
+
+
+/* AUDIT */
+
+function renderAudit(){
+
+document.getElementById("auditTable")
+.innerHTML=
+db.audit.length
+?
+`
+
+<div class="table-wrap">
+
+<table class="table">
+
+<thead>
+
+<tr>
+<th>Date</th>
+<th>User</th>
+<th>Module</th>
+<th>Action</th>
+<th>Details</th>
+</tr>
+
+</thead>
+
+<tbody>
+
+${db.audit.map(item=>`
+
+<tr>
+
+<td>
+${new Date(
+item.createdAt
+).toLocaleString()}
+</td>
+
+<td>
+${escapeHTML(item.user)}
+</td>
+
+<td>
+${escapeHTML(item.module)}
+</td>
+
+<td>
+${escapeHTML(item.action)}
+</td>
+
+<td>
+${escapeHTML(item.detail)}
+</td>
+
+</tr>
+
+`).join("")}
+
+</tbody>
+
+</table>
+
+</div>
+`
+:
+`<div class="empty">
+No audit activity yet.
+</div>`;
+
+}
+
+
+/* RECEIPT */
+
+function openReceipt(saleID){
+
+const sale=
+db.sales.find(
+item=>item.id===saleID
+);
+
+if(!sale)return;
+
+document.getElementById("modalBox")
+.innerHTML=`
+
+<div class="modal-head">
+
+<h2>Receipt</h2>
+
+<button class="x"
+onclick="closeModal()">×</button>
+
+</div>
+
+<div
+class="receipt"
+id="printReceipt">
+
+<h2>
+${escapeHTML(db.business.name)}
+</h2>
+
+<div class="center">
+
+${escapeHTML(
+db.business.address||""
+)}
+
+<br>
+
+${escapeHTML(
+db.business.phone||""
+)}
+
+<br>
+
+<small>
+${new Date(
+sale.createdAt
+).toLocaleString()}
+</small>
+
+</div>
+
+<hr>
+
+<b>
+Receipt: ${sale.invoice}
+</b>
+
+<br>
+
+Customer:
+${escapeHTML(
+customerName(sale.customerId)
+)}
+
+<table>
+
+${sale.items.map(item=>`
+
+<tr>
+
+<td>
+
+${escapeHTML(item.name)}
+
+<br>
+
+<small>
+${item.qty}
+×
+${money(item.price)}
+</small>
+
+</td>
+
+<td class="right">
+
+${money(
+item.qty*item.price-
+item.discount
+)}
+
+</td>
+
+</tr>
+
+`).join("")}
+
+</table>
+
+<div style="
+display:flex;
+justify-content:space-between;
+margin-top:15px">
+
+<span>Total</span>
+
+<span class="total">
+${money(sale.total)}
+</span>
+
+</div>
+
+<div style="
+display:flex;
+justify-content:space-between">
+
+<span>Paid</span>
+
+<b>${money(sale.paid)}</b>
+
+</div>
+
+<div style="
+display:flex;
+justify-content:space-between">
+
+<span>Balance</span>
+
+<b>${money(sale.balance)}</b>
+
+</div>
+
+<p class="center"
+style="margin-top:25px">
+
+Thank you for your business.
+
+</p>
+
+</div>
+
+<div class="actions"
+style="margin-top:12px">
+
+<button class="btn"
+onclick="printReceipt()">
+Print / Save PDF
+</button>
+
+</div>
+
+`;
+
+openModal();
+
+}
+
+
+function printReceipt(){
+
+const content=
+document.getElementById(
+"printReceipt"
+).innerHTML;
+
+const printWindow=
+window.open("","_blank");
+
+if(!printWindow){
+
+alert(
+"Please allow pop-ups to print the receipt."
+);
+
+return;
+
+}
+
+printWindow.document.write(`
+
+<html>
+
+<head>
+
+<title>BizFlow Receipt</title>
+
+<style>
+
+body{
+font-family:Arial;
+padding:20px
+}
+
+table{
+width:100%;
+border-collapse:collapse
+}
+
+td{
+padding:7px;
+border-bottom:1px dashed #ccc
+}
+
+.right{text-align:right}
+.center{text-align:center}
+
+</style>
+
+</head>
+
+<body>
+
+${content}
+
+</body>
+
+</html>
+
+`);
+
+printWindow.document.close();
+printWindow.focus();
+printWindow.print();
+
+}
+
+
+/* BACKUP */
+
+function backup(){
+
+const blob=
+new Blob(
+[
+JSON.stringify(
+db,
+null,
+2
+)
+],
+{
+type:"application/json"
+}
+);
+
+const link=
+document.createElement("a");
+
+link.href=
+URL.createObjectURL(blob);
+
+link.download=
+"bizflow-backup-"+
+today()+
+".json";
+
+document.body.appendChild(link);
+link.click();
+link.remove();
+
+showToast("Backup exported");
+
+}
+
+
+function restoreBackup(event){
+
+const file=
+event.target.files[0];
+
+if(!file)return;
+
+const reader=
+new FileReader();
+
+reader.onload=function(){
+
+try{
+
+const data=
+JSON.parse(reader.result);
+
+if(
+!data.business||
+!data.products||
+!data.sales||
+!data.customers
+){
+
+throw new Error();
+
+}
+
+db=data;
+
+saveDatabase();
+
+showToast("Backup restored");
+
+refreshAll();
+
+}catch(error){
+
+alert(
+"Invalid BizFlow backup."
+);
+
+}
+
+};
+
+reader.readAsText(file);
+
+}
+
+
+function resetData(){
+
+if(!confirm(
+"Reset all local demo data? This cannot be undone."
+))return;
+
+db=createSeedDatabase();
+
+cart=[];
+
+saveDatabase();
+
+refreshAll();
+
+showToast("Demo data reset");
+
+}
+
+
+/* MODAL */
+
+function openModal(){
+
+document
+.getElementById("modal")
+.classList.add("open");
+
+}
+
+
+function closeModal(){
+
+document
+.getElementById("modal")
+.classList.remove("open");
+
+}
+
+</script>
+
+</body>
+</html>
